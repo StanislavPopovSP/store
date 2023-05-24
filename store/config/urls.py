@@ -8,6 +8,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='index'),
     path('products/', include('products.urls')), # Можно написать дальше namespace='products' для обращения в шаблонах
+    path('users/', include('users.urls')),
 ]
 
 if settings.DEBUG:

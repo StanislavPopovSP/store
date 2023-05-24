@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from products.models import Product, ProductCategory
 
-def index(request) -> str|bool:
+
+def index(request) -> str | bool:
     context = {
         'title': 'Test title',
         'is_promotion': False,
@@ -9,7 +10,7 @@ def index(request) -> str|bool:
     return render(request, 'products/index.html', context)
 
 
-def products(request) -> str|object|object:
+def products(request) -> str | object | object:
     context = {
         'title': 'Store - Каталог',
         'products': Product.objects.all(),
