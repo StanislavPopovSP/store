@@ -14,5 +14,6 @@ def products(request):
         'title': 'Store - Каталог',
         'products': Product.objects.all(),
         'categories': ProductCategory.objects.all(),
+        'key': 'key'
     }
     return render(request, 'products/products.html', context)
