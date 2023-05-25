@@ -62,8 +62,8 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.request', # С мощью данной строчки можно обращаться к пользователю user в template теге
+                'django.contrib.auth.context_processors.auth', # С мощью данной строчки можно обращаться к пользователю user в template теге
                 'django.contrib.messages.context_processors.messages',
             ],
         },
