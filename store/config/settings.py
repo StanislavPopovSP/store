@@ -31,17 +31,18 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
+    'django.contrib.admin', # Приложение отвечает за админку
+    'django.contrib.auth', # Отвечает за работу с пользователями
     'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.sessions', # сессии
+    'django.contrib.messages', # Работа с ошибками и сообщениями о них
+    'django.contrib.staticfiles', # статик файлы
 
     'products.apps.ProductsConfig', # моё приложение
     'users.apps.UsersConfig' # приложение для пользователя
 ]
 
+# Это промежуточные слои кот-е за что-то отвечают, за безопасность, проброску ссесий для пользователей, аутентификация, csrf_tocen безопасность, и т.д.
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -54,9 +55,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'config.urls'
 
+# Отвечает за отображение шаблонов и работу с шаблонами
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'BACKEND': 'django.template.backends.django.DjangoTemplates', # Для того что бы шаблон оживился и выполнял какие-то методы, необходимо использовать BACKEND - движок для шаблонов.
         'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -112,7 +114,7 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
