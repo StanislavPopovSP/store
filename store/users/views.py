@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, HttpResponseRedirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from users.models import User
 from users.forms import UserLoginForm, UserRegistrForm, UserProfileForm
@@ -58,3 +58,8 @@ def profile(request):
         'form': form
     }
     return render(request, 'users/profile.html', context)
+
+
+def logout_user(request):
+    logout(request)
+    redirect('index')
