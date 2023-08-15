@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-l!o6w)_ggfaew5v#n_ao3d(@k6yd1h%l!@5*$4(06anf%-&%m3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []  # Расположение сайта по данному домену '*' - на любом домене проект будет доступен
+ALLOWED_HOSTS = ['*']  # Расположение сайта по данному домену '*' - на любом домене проект будет доступен
 
 
 # Application definition - установленные приложения
@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'products.apps.ProductsConfig'
+    'products.apps.ProductsConfig',
+    'users.apps.UsersConfig'
 ]
 # Промежуточные слои
 MIDDLEWARE = [
