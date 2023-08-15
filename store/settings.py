@@ -133,3 +133,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Users - мы должны глобально переопределяем модель с которой мы будем работать для пользователей, так как расширяем данную модель.
+AUTH_USER_MODEL  = 'users.User'  # 'users.User' - название приложения, название модели
