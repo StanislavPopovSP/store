@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from users.models import User
-from users.forms import UserLoginForm
+from users.forms import UserLoginForm, UserRegistrationForm
 from django.contrib import auth
 
 
@@ -18,6 +18,8 @@ def login(request):
             if user:
                 auth.login(request, user)
                 return redirect('index')
+            else:
+                return None
 
     else:
         form = UserLoginForm()
@@ -27,4 +29,16 @@ def login(request):
 
 def registration(request):
     """Функция отвечает за регистрацию"""
-    return render(request, 'users/registration.html')
+    if request.method == "POST":
+        form = UserRegistrationForm(data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            if user:
+                auth.login(request, user)
+                return redirect('index')
+            else:
+                return None
+    else:
+        form = UserRegistrationForm()
+    context = {'form': form}
+    return render(request, 'users/registration.html', context)
