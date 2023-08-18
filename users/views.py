@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from users.models import User
 from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm
-from django.contrib import auth
+from django.contrib import auth, messages
 
 
 def login(request):
@@ -18,9 +18,6 @@ def login(request):
             if user:
                 auth.login(request, user)
                 return redirect('index')
-        else:
-            return form.errors
-
     else:
         form = UserLoginForm()
     context = {'title': 'Store - Авторизация',
@@ -35,11 +32,10 @@ def registration(request):
         form = UserRegistrationForm(data=request.POST)
         if form.is_valid():
             user = form.save()
+            messages.success(request, 'Поздравляем! Вы успешно зарегистррованы!')
             if user:
                 auth.login(request, user)
                 return redirect('index')
-        else:
-            return form.errors
     else:
         form = UserRegistrationForm()
     context = {'title': 'Store - Регистрация',
@@ -56,10 +52,14 @@ def profile(request):
         if form.is_valid():
             form.save()
             return redirect('users:profile')
-        else:
-            return form.errors
     else:
         form = UserProfileForm(instance=user)
 
     context = {'title': 'Store - Профиль', 'form': form}
     return render(request, 'users/profile.html', context)
+
+
+def logout(request):
+    """Выход пользователя из сессии"""
+    auth.logout(request)
+    return redirect('index')
