@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from users.models import User
-from users.forms import UserLoginForm, UserRegistrationForm
+from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm
 from django.contrib import auth
 
 
@@ -18,12 +18,14 @@ def login(request):
             if user:
                 auth.login(request, user)
                 return redirect('index')
-            else:
-                return None
+        else:
+            return form.errors
 
     else:
         form = UserLoginForm()
-    context = {'form': form}
+    context = {'title': 'Store - Авторизация',
+               'form': form
+    }
     return render(request, 'users/login.html', context)
 
 
@@ -36,9 +38,28 @@ def registration(request):
             if user:
                 auth.login(request, user)
                 return redirect('index')
-            else:
-                return None
+        else:
+            return form.errors
     else:
         form = UserRegistrationForm()
-    context = {'form': form}
+    context = {'title': 'Store - Регистрация',
+               'form': form
+               }
     return render(request, 'users/registration.html', context)
+
+
+def profile(request):
+    """Обрабатывет страницу профиль"""
+    user = request.user
+    if request.method == 'POST':
+        form = UserProfileForm(data=request.POST, files=request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('users:profile')
+        else:
+            return form.errors
+    else:
+        form = UserProfileForm(instance=user)
+
+    context = {'title': 'Store - Профиль', 'form': form}
+    return render(request, 'users/profile.html', context)
