@@ -46,7 +46,7 @@ def registration(request):
 
 
 def profile(request):
-    """Обрабатывет страницу профиль"""
+    """Обрабатывет страницу профиль с корзиной товаров"""
     user = request.user
     if request.method == 'POST':
         form = UserProfileForm(data=request.POST, files=request.FILES, instance=user)
