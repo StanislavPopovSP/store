@@ -1,4 +1,5 @@
 from django.db import models
+from users.models import User
 
 class ProductCategory(models.Model):
     """Таблица категорий"""
@@ -20,3 +21,14 @@ class Product(models.Model):
 
     def __str__(self):
             return f'Продукт: {self.name} | Категория: {self.category.name}'
+
+
+class Basket(models.Model):
+    """Таблица для корзины товаров"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=0)
+    created_timestapp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+         return f'Корзина для {self.user.email} | Продукт: {self.product.name}'
