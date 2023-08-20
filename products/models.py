@@ -31,4 +31,4 @@ class Basket(models.Model):
     created_timestapp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
-         return f'Корзина для {self.user.email} | Продукт: {self.product.name}'
+         return f'Корзина для {self.user.username} | Продукт: {self.product.name}'
