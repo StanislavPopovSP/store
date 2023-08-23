@@ -11,13 +11,21 @@ def index(request):
     return render(request, 'products/index.html', context)
 
 
-def products(request):
+def products(request, category_id=None):
     """Отображает страницу products.html"""
+    # if category_id:
+    #     # category = ProductCategory.objects.get(id=category_id)
+    #     products = Product.objects.filter(category=category_id)
+    # else:
+    #     products = Product.objects.all()
+    # Через тернарный оператор
+    products = Product.objects.filter(category=category_id) if category_id else Product.objects.all()
+
     context = {
-        'title': 'Store - Каталог',
-        'products': Product.objects.all(),
-        'categories': ProductCategory.objects.all()
-    }
+            'title': 'Store - Каталог',
+            'products': products,
+            'categories': ProductCategory.objects.all()
+        }
     return render(request, 'products/products.html', context)
 
 # Обработчик событий
