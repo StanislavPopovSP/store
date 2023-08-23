@@ -38,3 +38,10 @@ def basket_add(request, product_id):
     # Когда действие выполнилось надо пользователя куда-то вернуть, на какой странице находится пользователь туда и вернуть
     return redirect(request.META['HTTP_REFERER']) # -> страница где было выполнено действие
     # return redirect(request.path) # -> страница на то что было направлено действие
+
+
+def basket_remove(request, basket_id):
+    """Удаляет корзину """
+    basket = Basket.objects.get(id=basket_id)
+    basket.delete()
+    return redirect(request.META['HTTP_REFERER'])
