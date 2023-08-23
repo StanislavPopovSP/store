@@ -23,6 +23,18 @@ class Product(models.Model):
             return f'Продукт: {self.name} | Категория: {self.category.name}'
 
 
+# Можем создать новый менеджер, он будет наследовать все методы которые уже имеются, создадим свой метод который можем вызывать в шаблонах
+class BasketQuerySet(models.QuerySet):
+    # self будет обращаться уже ко всему классу(всем объектам сразу)
+    def total_sum(self):
+        """Метод возвращает общую сумму в корине товаров для пользователя"""
+        return sum([basket.sum() for basket in self])
+
+    def total_quantity(self):
+        """Метод возвращает общее количество товаров для пользователя"""
+        return sum([basket.quantity for basket in self])
+
+
 class Basket(models.Model):
     """Таблица для корзины товаров"""
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -30,5 +42,22 @@ class Basket(models.Model):
     quantity = models.PositiveIntegerField(default=0)
     created_timestapp = models.DateTimeField(auto_now_add=True)
 
+    # Нужно переопределить objects, расширить добавленные методы
+    objects = BasketQuerySet.as_manager()
+
     def __str__(self) -> str:
          return f'Корзина для {self.user.username} | Продукт: {self.product.name}'
+
+    def sum(self):
+        """Метод возвращает сумму выбранного количества товаров в корзине """
+        return self.quantity * self.product.price
+
+    # def total_sum(self):
+    #     """Метод возвращает общую сумму в корине товаров для пользователя"""
+    #     baskets = Basket.objects.filter(user=self.user)
+    #     return sum([basket.summ() for basket in baskets])
+
+    # def total_quantity(self):
+    #     """Метод возвращает общее количество товаров для пользователя"""
+    #     baskets = Basket.objects.filter(user=self.user)
+    #     return sum([basket.quantity for basket in baskets])
