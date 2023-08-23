@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from products.models import Product, ProductCategory, Basket
-from users.models import User
+from django.contrib.auth.decorators import login_required
 
 
 def index(request):
@@ -21,6 +21,7 @@ def products(request):
     return render(request, 'products/products.html', context)
 
 # Обработчик событий
+@login_required
 def basket_add(request, product_id):
     """Добавляет товар в корзину"""
     product = Product.objects.get(id=product_id)  #  берем продукт который выбрали
@@ -40,6 +41,7 @@ def basket_add(request, product_id):
     # return redirect(request.path) # -> страница на то что было направлено действие
 
 
+@login_required
 def basket_remove(request, basket_id):
     """Удаляет корзину """
     basket = Basket.objects.get(id=basket_id)

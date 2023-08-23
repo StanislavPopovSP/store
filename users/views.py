@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
-from users.models import User
 from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm
 from django.contrib import auth, messages
 from products.models import Basket
+from django.contrib.auth.decorators import login_required
 
 
 def login(request):
@@ -45,6 +45,7 @@ def registration(request):
     return render(request, 'users/registration.html', context)
 
 
+@login_required
 def profile(request):
     """Обрабатывет страницу профиль с корзиной товаров"""
     user = request.user
@@ -74,6 +75,7 @@ def profile(request):
     return render(request, 'users/profile.html', context)
 
 
+@login_required
 def logout(request):
     """Выход пользователя из сессии"""
     auth.logout(request)
