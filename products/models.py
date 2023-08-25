@@ -6,6 +6,10 @@ class ProductCategory(models.Model):
     name = models.CharField(max_length=128, unique=True)
     description = models.TextField(null=True, blank=True)
 
+    class Meta: # Отвечает за доп настройки
+        verbose_name = 'категорию'
+        verbose_name_plural = 'Категории'
+
     def __str__(self) -> str:
         return self.name
 
@@ -18,6 +22,10 @@ class Product(models.Model):
     quantity = models.PositiveIntegerField(default=0)
     image = models.ImageField(upload_to='products_images/')
     category = models.ForeignKey(ProductCategory, on_delete=models.PROTECT)  # Категорию невозможно будет удалить, пока не будут удалены все продукты данной категории.
+
+    class Meta: # Отвечает за доп настройки
+        verbose_name = 'продукт'
+        verbose_name_plural = 'Продукты'
 
     def __str__(self):
             return f'Продукт: {self.name} | Категория: {self.category.name}'
