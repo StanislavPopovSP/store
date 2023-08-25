@@ -1,15 +1,26 @@
+from typing import Any, Dict
 from django.shortcuts import render, redirect
 from products.models import Product, ProductCategory, Basket
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.views.generic.base import TemplateView
 
 
-def index(request):
+class IndexView(TemplateView):
     """Отображает главную страницу"""
-    context = {
-        'title': 'Store'
-    }
-    return render(request, 'products/index.html', context)
+    template_name = 'products/index.html'
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, str]:
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Store'
+        return context
+
+# def index(request):
+#     """Отображает главную страницу"""
+#     context = {
+#         'title': 'Store'
+#     }
+#     return render(request, 'products/index.html', context)
 
 
 def products(request, category_id=None, page_number=1):
