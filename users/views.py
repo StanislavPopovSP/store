@@ -7,29 +7,40 @@ from products.models import Basket
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView, UpdateView
 from users.models import User
-
-def login(request):
-    """Функция отвечает за авторизацию"""
-    if request.method == 'POST':
-        form = UserLoginForm(data=request.POST)
-        if form.is_valid():
-            username = request.POST['username']
-            password = request.POST['password']
-            # Или взять данные из формы которые пришли
-            # username = form.data['username']
-            # password = form.data['password']
-            user = auth.authenticate(username=username, password=password)
-            if user:
-                auth.login(request, user)
-                return redirect('index')
-    else:
-        form = UserLoginForm()
-    context = {'title': 'Store - Авторизация',
-               'form': form
-    }
-    return render(request, 'users/login.html', context)
+from django.contrib.auth.views import LoginView
 
 
+# С примененнием представлений
+class UserLoginView(LoginView):
+    """Отвечает за авторизацию"""
+    template_name = 'users/login.html'
+    authentication_form = UserLoginForm
+
+
+# С применением функций
+# def login(request):
+#     """Функция отвечает за авторизацию"""
+#     if request.method == 'POST':
+#         form = UserLoginForm(data=request.POST)
+#         if form.is_valid():
+#             username = request.POST['username']
+#             password = request.POST['password']
+#             # Или взять данные из формы которые пришли
+#             # username = form.data['username']
+#             # password = form.data['password']
+#             user = auth.authenticate(username=username, password=password)
+#             if user:
+#                 auth.login(request, user)
+#                 return redirect('index')
+#     else:
+#         form = UserLoginForm()
+#     context = {'title': 'Store - Авторизация',
+#                'form': form
+#     }
+#     return render(request, 'users/login.html', context)
+
+
+# С примененнием представлений
 class UserRegistrationView(CreateView):
     """Функция отвечает за регистрацию"""
     model = User
@@ -42,6 +53,7 @@ class UserRegistrationView(CreateView):
         context['title'] = 'Store - Регистрация'
         return context
 
+# С применением функций
 # def registration(request):
 #     """Функция отвечает за регистрацию"""
 #     if request.method == "POST":
@@ -107,8 +119,8 @@ class UpdateProfileView(UpdateView):
 #     return render(request, 'users/profile.html', context)
 
 
-@login_required
-def logout(request):
-    """Выход пользователя из сессии"""
-    auth.logout(request)
-    return redirect('index')
+# @login_required
+# def logout(request):
+#     """Выход пользователя из сессии"""
+#     auth.logout(request)
+#     return redirect('index')
