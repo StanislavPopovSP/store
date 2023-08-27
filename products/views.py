@@ -6,16 +6,14 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
+from common.views import TitleMixin
 
 
-class IndexView(TemplateView):
+class IndexView(TitleMixin, TemplateView):
     """Отображает главную страницу"""
     template_name = 'products/index.html'
+    title = 'Store'
 
-    def get_context_data(self, **kwargs: Any) -> Dict[str, str]:
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Store'
-        return context
 
 # def index(request):
 #     """Отображает главную страницу"""
@@ -25,11 +23,12 @@ class IndexView(TemplateView):
 #     return render(request, 'products/index.html', context)
 
 
-class ProductsListView(ListView):
+class ProductsListView(TitleMixin, ListView):
     """Отображает страницу products.html"""
     model = Product
     template_name = 'products/products.html'
     paginate_by = 3
+    title = 'Store - Каталог'
 
     def get_queryset(self) -> QuerySet[Any]:
         queryset = super().get_queryset()  # queryset - это уже сформированный список объектов Product.objects.all()
@@ -38,7 +37,6 @@ class ProductsListView(ListView):
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context =  super().get_context_data(**kwargs)
-        context['title'] = 'Store - Каталог'
         context['categories'] = ProductCategory.objects.all()
         return context
 

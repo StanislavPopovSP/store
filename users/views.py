@@ -8,14 +8,16 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView, UpdateView
 from users.models import User
 from django.contrib.auth.views import LoginView
+from django.contrib.messages.views import SuccessMessageMixin
+from common.views import TitleMixin
 
 
 # С примененнием представлений
-class UserLoginView(LoginView):
+class UserLoginView(TitleMixin, LoginView):
     """Отвечает за авторизацию"""
     template_name = 'users/login.html'
     authentication_form = UserLoginForm
-
+    title = 'Store - Авторизация'
 
 # С применением функций
 # def login(request):
@@ -41,17 +43,15 @@ class UserLoginView(LoginView):
 
 
 # С примененнием представлений
-class UserRegistrationView(CreateView):
+class UserRegistrationView(TitleMixin, SuccessMessageMixin, CreateView):
     """Функция отвечает за регистрацию"""
     model = User
     form_class = UserRegistrationForm
     template_name = 'users/registration.html'
     success_url = reverse_lazy('users:login')
+    success_message = 'Поздравляем! Вы успешно зарегистррованы!'
+    title = 'Store - Регистрация'
 
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        context =  super().get_context_data(**kwargs)
-        context['title'] = 'Store - Регистрация'
-        return context
 
 # С применением функций
 # def registration(request):
@@ -73,18 +73,18 @@ class UserRegistrationView(CreateView):
 
 
 # С примененнием представлений
-class UpdateProfileView(UpdateView):
+class UpdateProfileView(TitleMixin, UpdateView):
     """Обрабатывет страницу профиль с корзиной товаров"""
     model = User
     form_class = UserProfileForm
     template_name = 'users/profile.html'
+    title = 'Store - Личный кабинет'
 
     def get_success_url(self) -> str:
         return reverse_lazy('users:profile', kwargs={'pk': self.object.id})
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context =  super().get_context_data(**kwargs)
-        context['title'] = 'Store - Личный кабинет'
         context['baskets'] = Basket.objects.filter(user=self.request.user)
         return context
 
