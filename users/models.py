@@ -26,3 +26,12 @@ class EmailVerification(models.Model):
 
     def __str__(self) -> str:
         return f'EmailVerification object for {self.user.email}'
+
+    def send_verification_email(self):
+        """Метод оправляет письмо с подтверждением электронной почты"""
+        send_mail(
+            'Subject here',
+            'Test verification email.',
+            'from@example.com',
+            [self.user.email],
+        )
