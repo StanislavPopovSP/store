@@ -1,6 +1,12 @@
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
-from users.models import User
+from typing import Any
+import uuid
+from datetime import timedelta
+
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
+from django.utils.timezone import now  # Можно из джанго взять текущее время
+
+from users.models import User, EmailVerification
 
 
 class UserLoginForm(AuthenticationForm):
@@ -29,6 +35,18 @@ class UserRegistrationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'username', 'email', 'password1', 'password2')
+
+    # Данный метод отрабатывается в тот момент когда создается объект пользователя, данный метод в данном примере возвращает объект USER
+    # Метод создает для пользователя уникальный ключ для отправки его на почту для верификации
+    def save(self, commit: bool = ...) -> Any:
+        user = super().save(commit)
+        # Будем формировать логику, которая отправляет электронное письмо, на адрес электронной почты пользователя, с просьбой подтвердить адрес с его электронной почтой
+        expiration = now() + timedelta(hours=48)
+        code = uuid.uuid4()
+        # Будет создаваться каждый раз EmailVerification при регистрации нового пользователя
+        record = EmailVerification.objects.create(code=code, user=user, expiration=expiration)
+        record.send_verification_email()
+        return user
 
 
 class UserProfileForm(UserChangeForm):
