@@ -1,5 +1,5 @@
 from django.urls import path
-from users.views import UserRegistrationView, UpdateProfileView, UserLoginView
+from users.views import UserRegistrationView, UpdateProfileView, UserLoginView, EmailVerificationView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LogoutView
 
@@ -18,5 +18,7 @@ urlpatterns = [
     path('login/', UserLoginView.as_view(), name='login'),
     path('registration/ ', UserRegistrationView.as_view(), name='registration'),
     path('profile/<int:pk>/', login_required(UpdateProfileView.as_view()), name='profile'),
-    path('logout/', login_required(LogoutView.as_view()), name='logout')
+    path('logout/', login_required(LogoutView.as_view()), name='logout'),
+    path('verify/<str:email>/<uuid:code>/', EmailVerificationView.as_view(), name='email_verification')  # передаем email, т.к нужно определить (пользователь получает электронное письмо себе в почтовый адрес, переходит по ссылке мы не можем определить что это за пользователь поэтому берем email и code)
+
 ]
