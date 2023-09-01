@@ -1,15 +1,21 @@
 from typing import Any, Dict
+from django import http
+from django.http import HttpRequest, HttpResponse
+
+from django.contrib.auth.decorators import login_required
+from django.contrib import auth, messages
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm
-from django.contrib import auth, messages
-from products.models import Basket
-from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView, UpdateView
-from users.models import User
 from django.contrib.auth.views import LoginView
+from django.views.generic.base import TemplateView
 from django.contrib.messages.views import SuccessMessageMixin
+
+from products.models import Basket
+from users.models import User, EmailVerification
 from common.views import TitleMixin
+
+from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm
 
 
 # С примененнием представлений
@@ -118,6 +124,24 @@ class UpdateProfileView(TitleMixin, UpdateView):
 #                }
 #     return render(request, 'users/profile.html', context)
 
+
+class EmailVerificationView(TitleMixin, TemplateView):
+    """Проверяет входящие данные, верификация email """
+    title = 'Store - Подтверждение электронной почты'
+    template_name = 'users/email_verification.html'
+
+    def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        code = kwargs['code']
+        user = User.objects.get(email=self.kwargs['email'])
+        email_verification = EmailVerification.objects.filter(user=user, code=code)
+        # Если данные пришли
+        if email_verification.exists():
+            user.is_verified_email = True
+            user.save()
+            return super().get(request, *args, **kwargs)
+        # Если не пришли, то перенаправит на главную страницу
+        else:
+            return redirect('index')
 
 # @login_required
 # def logout(request):
