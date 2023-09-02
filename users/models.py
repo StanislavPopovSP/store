@@ -4,6 +4,7 @@ from django.core.mail import send_mail
 from django.shortcuts import redirect
 from django.conf import settings
 from django.urls import reverse
+from django.utils.timezone import now
 
 
 class User(AbstractUser):
@@ -45,3 +46,7 @@ class EmailVerification(models.Model):
             from_email='from@example.com',
             recipient_list=[self.user.email],
         )
+
+    def is_expired(self):
+        """Проверяет ссылку авторизации на истечение её строка"""
+        return True if now() >= self.expiration else False
