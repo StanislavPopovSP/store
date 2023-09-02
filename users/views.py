@@ -133,9 +133,9 @@ class EmailVerificationView(TitleMixin, TemplateView):
     def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
         code = kwargs['code']
         user = User.objects.get(email=self.kwargs['email'])
-        email_verification = EmailVerification.objects.filter(user=user, code=code)
-        # Если данные пришли
-        if email_verification.exists():
+        email_verification: list = EmailVerification.objects.filter(user=user, code=code)
+        # Если данные пришли и время ссылки не истекло
+        if email_verification.exists() and not email_verification.first().is_expired():  # Если список не пустой и срок ссылки не истёк
             user.is_verified_email = True
             user.save()
             return super().get(request, *args, **kwargs)
