@@ -142,4 +142,8 @@ LOGIN_REDIRECT_URL = '/'  # для перенаправления на глав�
 LOGOUT_REDIRECT_URL = '/'  # для перенаправления на главную страницу при выходе из аккаунта
 
 # Sending email
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'stas101.VIP@yandex.ru'
+EMAIL_HOST_PASSWORD = '5464132123VATO100965'
+EMAIL_USE_SSL = True
