@@ -1,21 +1,20 @@
 from typing import Any, Dict
+
 from django import http
-from django.http import HttpRequest, HttpResponse
-
-from django.contrib.auth.decorators import login_required
 from django.contrib import auth, messages
-from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView, UpdateView
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
-from django.views.generic.base import TemplateView
 from django.contrib.messages.views import SuccessMessageMixin
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
+from django.views.generic.base import TemplateView
+from django.views.generic.edit import CreateView, UpdateView
 
-from products.models import Basket
-from users.models import User, EmailVerification
 from common.views import TitleMixin
-
-from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm
+from products.models import Basket
+from users.forms import UserLoginForm, UserProfileForm, UserRegistrationForm
+from users.models import EmailVerification, User
 
 
 # С примененнием представлений
@@ -24,6 +23,7 @@ class UserLoginView(TitleMixin, LoginView):
     template_name = 'users/login.html'
     authentication_form = UserLoginForm
     title = 'Store - Авторизация'
+
 
 # С применением функций
 # def login(request):
@@ -89,10 +89,6 @@ class UpdateProfileView(TitleMixin, UpdateView):
     def get_success_url(self) -> str:
         return reverse_lazy('users:profile', kwargs={'pk': self.object.id})
 
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        context =  super().get_context_data(**kwargs)
-        context['baskets'] = Basket.objects.filter(user=self.request.user)
-        return context
 
 # С применением функций
 # @login_required
