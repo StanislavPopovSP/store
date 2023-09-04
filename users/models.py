@@ -11,7 +11,7 @@ class User(AbstractUser):
     """Модель для пользователя"""
     image = models.ImageField(upload_to='users_images', null=True, blank=True)  # Добаляем поле для изображения пользователя
     is_verified_email = models.BooleanField(default=False)  # Добаляем поле которое будет отвечать подтвердил ли пользователь адрес электронной поты
-    email = models.EmailField(unique=True) 
+    email = models.EmailField(unique=True)
 
     class Meta:
         verbose_name = 'пользователя'
@@ -44,7 +44,7 @@ class EmailVerification(models.Model):
         send_mail(
             subject=subject,
             message=message,
-            from_email='from@example.com',
+            from_email=settings.EMAIL_HOST_USER,
             recipient_list=[self.user.email],
         )
 
