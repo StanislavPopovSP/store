@@ -11,6 +11,7 @@ class User(AbstractUser):
     """Модель для пользователя"""
     image = models.ImageField(upload_to='users_images', null=True, blank=True)  # Добаляем поле для изображения пользователя
     is_verified_email = models.BooleanField(default=False)  # Добаляем поле которое будет отвечать подтвердил ли пользователь адрес электронной поты
+    email = models.EmailField(unique=True) 
 
     class Meta:
         verbose_name = 'пользователя'
