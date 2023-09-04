@@ -1,12 +1,14 @@
 from django.db import models
+
 from users.models import User
+
 
 class ProductCategory(models.Model):
     """Таблица категорий"""
     name = models.CharField(max_length=128, unique=True)
     description = models.TextField(null=True, blank=True)
 
-    class Meta: # Отвечает за доп настройки
+    class Meta:  # Отвечает за доп настройки
         verbose_name = 'категорию'
         verbose_name_plural = 'Категории'
 
@@ -23,12 +25,12 @@ class Product(models.Model):
     image = models.ImageField(upload_to='products_images/')
     category = models.ForeignKey(ProductCategory, on_delete=models.PROTECT)  # Категорию невозможно будет удалить, пока не будут удалены все продукты данной категории.
 
-    class Meta: # Отвечает за доп настройки
+    class Meta:  # Отвечает за доп настройки
         verbose_name = 'продукт'
         verbose_name_plural = 'Продукты'
 
     def __str__(self):
-            return f'Продукт: {self.name} | Категория: {self.category.name}'
+        return f'Продукт: {self.name} | Категория: {self.category.name}'
 
 
 # Можем создать новый менеджер, он будет наследовать все методы которые уже имеются, создадим свой метод который можем вызывать в шаблонах
@@ -54,7 +56,7 @@ class Basket(models.Model):
     objects = BasketQuerySet.as_manager()
 
     def __str__(self) -> str:
-         return f'Корзина для {self.user.username} | Продукт: {self.product.name}'
+        return f'Корзина для {self.user.username} | Продукт: {self.product.name}'
 
     def sum(self):
         """Метод возвращает сумму выбранного количества товаров в корзине """
