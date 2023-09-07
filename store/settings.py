@@ -38,6 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',  # django-allauth
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.github',
 
     'products.apps.ProductsConfig',
     'users.apps.UsersConfig'
@@ -68,7 +74,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',  # С мощью данной строчки можно обращаться к пользователю user в template теге
                 'django.contrib.messages.context_processors.messages',  # С мощью данной строчки можно обращаться к пользователю user в template теге
-                'products.context_processors.baskets'
+                'products.context_processors.baskets', # Подключение своего контекстного процессора
             ],
         },
     },
@@ -153,8 +159,31 @@ LOGIN_REDIRECT_URL = '/'  # для перенаправления на глав�
 LOGOUT_REDIRECT_URL = '/'  # для перенаправления на главную страницу при выходе из аккаунта
 
 # Sending email
-EMAIL_HOST = 'smtp.yandex.ru'
-EMAIL_PORT = 465
-EMAIL_HOST_USER = 'stas101.VIP@yandex.ru'
-EMAIL_HOST_PASSWORD = '5464132123VATO100965'
-EMAIL_USE_SSL = True
+# EMAIL_HOST = 'smtp.yandex.ru'
+# EMAIL_PORT = 465
+# EMAIL_HOST_USER = 'stas101.VIP@yandex.ru'
+# EMAIL_HOST_PASSWORD = '5464132123VATO100965'
+# EMAIL_USE_SSL = True
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Подключение django-allauth
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+    # `allauth` specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SITE_ID = 1  # django-allauth с которым сайтом будет работать
+
+# Provider specific settings
+SOCIALACCOUNT_PROVIDERS = {
+    'github': {
+        'SCOPE': [   # Какой scope берется
+            'user',  # Пользователь
+            # 'repo',  # Репозиторий
+            # 'read:org',  # Данные на чтение организаций если есть у пользователя
+        ],
+    }
+}
