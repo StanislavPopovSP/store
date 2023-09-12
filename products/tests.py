@@ -1,8 +1,10 @@
 from http import HTTPStatus
+
 from django.test import TestCase
 from django.urls import reverse
-from store.asgi import *
+
 from products.models import Product, ProductCategory
+from store.asgi import *
 
 
 class IndexViewTestCase(TestCase):
