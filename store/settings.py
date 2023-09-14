@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',  # django-allauth
+    'debug_toolbar',  # django-debug-toolbar
 
     'allauth',
     'allauth.account',
@@ -57,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',  # Аунтификацию добавляет и т.д
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 # Там где распологаются наши URL адреса
@@ -74,7 +76,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',  # С мощью данной строчки можно обращаться к пользователю user в template теге
                 'django.contrib.messages.context_processors.messages',  # С мощью данной строчки можно обращаться к пользователю user в template теге
-                'products.context_processors.baskets', # Подключение своего контекстного процессора
+                'products.context_processors.baskets',  # Подключение своего контекстного процессора
             ],
         },
     },
@@ -83,6 +85,10 @@ TEMPLATES = [
 # Расположение данного файла, для деплоя нашего проекта на продакшен
 WSGI_APPLICATION = 'store.wsgi.application'
 
+INTERNAL_IPS = [
+    '127.0.0.1',
+    'localhost',
+]
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -100,7 +106,7 @@ DATABASES = {
         'NAME': 'store_db',
         'USER': 'store_username',
         'PASSWORD': 'store_password',
-        'HOST': 'localhost',
+        'HOST': '127.0.0.1',
         'PORT': '5432',
     }
 }
