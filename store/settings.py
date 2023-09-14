@@ -175,13 +175,13 @@ LOGIN_REDIRECT_URL = '/'  # для перенаправления на глав�
 LOGOUT_REDIRECT_URL = '/'  # для перенаправления на главную страницу при выходе из аккаунта
 
 # Sending email
-# EMAIL_HOST = 'smtp.yandex.ru'
-# EMAIL_PORT = 465
-# EMAIL_HOST_USER = 'stas101.VIP@yandex.ru'
-# EMAIL_HOST_PASSWORD = '5464132123VATO100965'
-# EMAIL_USE_SSL = True
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'stas101.VIP@yandex.ru'
+EMAIL_HOST_PASSWORD = '5464132123VATO100965'
+EMAIL_USE_SSL = True
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Подключение django-allauth
 AUTHENTICATION_BACKENDS = [
@@ -203,3 +203,11 @@ SOCIALACCOUNT_PROVIDERS = {
         ],
     }
 }
+
+# Celery settings
+
+CELERY_BROKER_URL ='redis://127.0.0.1:6379/1'
+CELERY_RESULT_BACKEND ='redis://127.0.0.1:6379/1'
+# CELERY_ACCEPT_CONTENT = ['json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIZER = 'json'
