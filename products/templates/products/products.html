@@ -1,5 +1,5 @@
 {% extends 'products/base.html' %}
-{% load static %}
+{% load static cache %}
 
 {% block css %}
     <link href="{% static 'vendor/css/products.css' %}" rel="stylesheet">
@@ -48,6 +48,7 @@
                 </div>
 
                 <div class="row">
+                    {% cache 30 object_list %}
                     {% for product in object_list %}
                         <div class="col-lg-4 col-md-6 mb-4">
                             <div class="card h-100">
@@ -72,6 +73,7 @@
                             </div>
                         </div>
                     {% endfor %}
+                    {% endcache %}
                 </div>
                 <!--Пагинация-->
                 {% if is_paginated %}

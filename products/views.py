@@ -1,4 +1,5 @@
 from typing import Any, Dict
+from django.core.cache import cache
 
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
@@ -25,7 +26,6 @@ class IndexView(TitleMixin, TemplateView):
 #     }
 #     return render(request, 'products/index.html', context)
 
-
 class ProductsListView(TitleMixin, ListView):
     """Отображает страницу products.html"""
     model = Product
@@ -34,13 +34,19 @@ class ProductsListView(TitleMixin, ListView):
     title = 'Store - Каталог'
 
     def get_queryset(self) -> QuerySet[Any]:
+        """Получаю все продукты по категории"""
         queryset = super().get_queryset()  # queryset - это уже сформированный список объектов Product.objects.all()
         category_id = self.kwargs.get('category_id')  # в self.kwargs хранятся дополнительные приходящие параметры
         return queryset.filter(category=category_id) if category_id else queryset
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        """Отображает закешированные категории"""
         context = super().get_context_data(**kwargs)
-        context['categories'] = ProductCategory.objects.all()
+        categories = cache.get('categories')  # получаю закешированные категории по ключу 'categories'
+        if not categories:
+            categories = ProductCategory.objects.all()
+            cache.set('categories', categories, 30)  # set кеширует данные категории в кеш (key, value, timeout) - key ключ по которому идет обращение, value то что кэшируем, timeout - время в секундах
+        context['categories'] = categories
         return context
 
 
