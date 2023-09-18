@@ -1,13 +1,11 @@
-import uuid
-from datetime import timedelta
 from typing import Any
 
 from django import forms
 from django.contrib.auth.forms import (AuthenticationForm, UserChangeForm,
                                        UserCreationForm)
-from django.utils.timezone import now  # Можно из джанго взять текущее время
 
-from users.models import EmailVerification, User
+from users.models import User
+from users.tasks import settings_email_verification
 
 
 class UserLoginForm(AuthenticationForm):
@@ -42,13 +40,9 @@ class UserRegistrationForm(UserCreationForm):
     # Данный метод отрабатывается в тот момент когда создается объект пользователя, данный метод в данном примере возвращает объект USER
     # Метод создает для пользователя уникальный ключ для отправки его на почту для верификации
     def save(self, commit: bool = ...) -> Any:
+        """Метод получает пользователя из формы и отправлем ему письмо на почту"""
         user = super().save(commit)
-        # Будем формировать логику, которая отправляет электронное письмо, на адрес электронной почты пользователя, с просьбой подтвердить адрес с его электронной почтой
-        expiration = now() + timedelta(hours=48)
-        code = uuid.uuid4()
-        # Будет создаваться каждый раз EmailVerification при регистрации нового пользователя
-        record = EmailVerification.objects.create(code=code, user=user, expiration=expiration)
-        record.send_verification_email()
+        settings_email_verification.delay(user.pk)  # Если вызывать () то задача не будет обработана паралельно, метод delay нужен для паралельной отправки
         return user
 
 
