@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.github',
 
     'products.apps.ProductsConfig',
-    'users.apps.UsersConfig'
+    'users.apps.UsersConfig',
+    'orders.apps.OrdersConfig',
 ]
 # Промежуточные слои
 MIDDLEWARE = [
@@ -208,6 +209,3 @@ SOCIALACCOUNT_PROVIDERS = {
 
 CELERY_BROKER_URL ='redis://127.0.0.1:6379/1'
 CELERY_RESULT_BACKEND ='redis://127.0.0.1:6379/1'
-# CELERY_ACCEPT_CONTENT = ['json']
-# CELERY_TASK_SERIALIZER = 'json'
-# CELERY_RESULT_SERIALIZER = 'json'
