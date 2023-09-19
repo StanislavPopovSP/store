@@ -1,10 +1,9 @@
-from django.shortcuts import render
 from common.views import TitleMixin
-from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
+from orders.forms import OrderForm
 
-
-class OrderCreateView(TitleMixin, TemplateView):
+class OrderCreateView(TitleMixin, CreateView):
     """Оформление заказа"""
     template_name = 'orders/order-create.html'
     title = 'Store - Оформление заказа'
+    form_class = OrderForm
