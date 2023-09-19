@@ -26,6 +26,7 @@ urlpatterns = [
     path('products/', include('products.urls', namespace='products')),  # namespace - для того что бы могли в шаблонах обращаться
     path('users/', include('users.urls', namespace='users')),
     path('accounts/', include('allauth.urls')),
+    path('orders/', include('orders.urls', namespace='orders')),
 ]
 
 if settings.DEBUG:
